@@ -3,7 +3,7 @@ const { Prompt } = require("inquirer");
 const db = require("./db/connection");
 require("console.table");
 
-function startUp() {
+function startApp() {
     // how would I insert the users name in the log? ($username)?
     console.log("Welcome!");
     prompt([
@@ -54,8 +54,37 @@ function startUp() {
             case "Exit":
                 db.end();
         } 
-    }
-    
-    )
+    });
 }
+
+async function viewDepts() {
+    const depts = await db.query("SELECT * FROM departments")
+    console.log (depts)
+    startApp()
+
+}
+
+async function addDept() {
+    const {dept} = await prompt ([
+        {
+            type: "input",
+            message: "What is the department name?",
+            name: "dept",
+        },
+    ]);
+     db.query("insert into department (name) values ($1::varchar) returning id, name as department name", [dept], (err, {rows})=> {
+        if (err) console.log (err.message);
+        else {
+            console.log("Insert complete");
+            console.table(rows)
+            startApp();
+        }
+    });
+}
+
+async function viewEmployees() {
+    const profile = await db.query("SELECT * FROM employee", (err,)), 
+}
+
+
 
