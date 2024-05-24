@@ -1,4 +1,4 @@
-\c employees_db 
+\c employees
 
 INSERT INTO department
     (name)
